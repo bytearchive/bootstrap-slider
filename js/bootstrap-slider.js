@@ -229,6 +229,10 @@
 
             this.inDrag = true;
             var val = this.calculateValue();
+            this.tooltipInner.text(
+                this.formater(val)
+            );
+
             this.element.trigger({
                     type: 'slideStart',
                     value: val

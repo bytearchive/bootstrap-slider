@@ -119,7 +119,6 @@
         ];
 
         this.offset = this.picker.offset();
-        this.size = this.picker[0][this.sizePos];
 
         this.formater = options.formater;
 
@@ -135,12 +134,19 @@
                 mousedown: $.proxy(this.mousedown, this)
             });
         }
+        // Calculate initial tooltip position
+        var size = (this.orientation == 'horizontal') ? this.element.width() : this.element.height();
+        var px = size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
+        this.tooltip[0].style[this.stylePos] = px;
 
         if (tooltip === 'show') {
             this.picker.on({
                 mouseenter: $.proxy(this.showTooltip, this),
                 mouseleave: $.proxy(this.hideTooltip, this)
             });
+        } else if (tooltip === 'always') {
+
+            this.tooltip.addClass('in');
         } else {
             this.tooltip.addClass('hide');
         }
@@ -160,7 +166,8 @@
         },
 
         hideTooltip: function(){
-            if (this.inDrag === false) {
+            var tooltip = this.element.data('slider-tooltip')||options.tooltip;
+            if ((this.inDrag === false) & (tooltip !== 'always')) {
                 this.tooltip.removeClass('in');
             }
             this.over = false;
@@ -187,7 +194,9 @@
                 this.tooltipInner.text(
                     this.formater(this.value[0])
                 );
-                this.tooltip[0].style[this.stylePos] = this.size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
+                var px = this.size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
+                console.log(px)
+                this.tooltip[0].style[this.stylePos] = px;
             }
         },
 
@@ -292,6 +301,7 @@
                 this.hideTooltip();
             }
             var val = this.calculateValue();
+
             this.element
                 .trigger({
                     type: 'slideStop',
@@ -364,7 +374,7 @@
                 data = $this.data('slider'),
                 options = typeof option === 'object' && option;
             if (!data)  {
-                $this.data('slider', (data = new Slider(this, $.extend({}, $.fn.slider.defaults,options))));
+                $this.data('slider', (data = new Slider(this, $.extend({}, $.fn.slider.defaults, options))));
             }
             if (typeof option == 'string') {
                 data[option](val);

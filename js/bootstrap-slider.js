@@ -135,9 +135,10 @@
             });
         }
         // Calculate initial tooltip position
-        var size = (this.orientation == 'horizontal') ? this.element.width() : this.element.height();
-        var px = size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
-        this.tooltip[0].style[this.stylePos] = px;
+        var size = (this.orientation == 'horizontal') ? this.element.outerWidth() : this.element.outerHeight();
+        var px = size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2);
+        px -= $('.slider-handle').width() / 2;
+        this.tooltip[0].style[this.stylePos] = px + 'px';
 
         if (tooltip === 'show') {
             this.picker.on({
@@ -194,9 +195,10 @@
                 this.tooltipInner.text(
                     this.formater(this.value[0])
                 );
-                var px = this.size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2) +'px';
-                console.log(px)
-                this.tooltip[0].style[this.stylePos] = px;
+                if (this.size) {
+                    var px = this.size * this.percentage[0]/100 - (this.orientation === 'vertical' ? this.tooltip.outerHeight()/2 : this.tooltip.outerWidth()/2);
+                    this.tooltip[0].style[this.stylePos] = px  +'px';
+                }
             }
         },
 

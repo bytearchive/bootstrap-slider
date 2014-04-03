@@ -6,6 +6,10 @@
     "Stefan Petre",
     "Optiflows"
   ],
+  "main": [
+    "js/bootstrap-slider.js",
+    "css/bootstrap-slider.css"
+  ],
   "description": "Optiflows fork of bootstrap-slider component by Stefan Petre",
   "keywords": [
     "javascript",
